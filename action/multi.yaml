@@ -1,0 +1,12 @@
+- name: Ping it like you mean it
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Check if service is available
+      pms:
+        auth:
+          address: http://localhost:8000
+          username: user
+          password: pass
+        endpoint: /test/{{ item }}
+      loop: "{{ range(0, 3) | list }}"
