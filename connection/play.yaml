@@ -1,0 +1,7 @@
+- name: Ping it like you mean it
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Check if service is available
+      pms:
+        endpoint: /test/123

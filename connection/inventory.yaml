@@ -1,0 +1,7 @@
+all:
+  hosts:
+    host_a:
+      ansible_pms_address: http://localhost:8000
+      ansible_connection: pms
+      ansible_pms_username: user
+      ansible_pms_password: pass
