@@ -1,7 +1,27 @@
 # Ping my service Ansible plugins
 
 This repository contains source code for various Ansible plugins that
-demonstrate various ways of interacting with web APIs using Ansible.
+demonstrate various ways of interacting with web APIs using Ansible. Also
+included is the mock service that we can use to test the modules.
+
+
+## Quickstart
+
+First, make sure you have Ansible 2.8.1 or newer installed. Next, start the
+mock server:
+
+    $ python3 server.py
+
+In another terminal, move to the `module` or `action` folder and run:
+
+    $ ansible-playbook play.yaml
+
+To test the connection plugin, move to the `connection` folder and run:
+
+    $ ansible-playbook -i inventory.yaml play.yaml
+
+
+## Mock server
 
 The `server.py` file contains a mock web service that the plugins can be
 tested against. We can start the server by running:
