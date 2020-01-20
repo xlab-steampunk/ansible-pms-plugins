@@ -70,7 +70,7 @@ import json
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils.urls import Request, ConnectionError
 from ansible.module_utils.six.moves.urllib.error import HTTPError, URLError
-from ansible.plugins.connection import ConnectionBase
+from ansible.plugins.connection import ConnectionBase, ensure_connect
 from ansible.plugins.loader import connection_loader
 
 
@@ -81,7 +81,8 @@ class Connection(ConnectionBase):
     def __init__(self, play_context, *args, **kwargs):
         super(Connection, self).__init__(play_context, *args, **kwargs)
         self._messages = []
-        self._sub_plugin = dict(type="external")
+        self._sub_plugin = {}
+        self._conn_closed = False
 
         # We are, for the most part, just a local connection that knows how to
         # perform HTTP requests.
@@ -98,7 +99,7 @@ class Connection(ConnectionBase):
         self._client = Request()
 
         # Login
-        status, headers, _ = self.post("/tokens", dict(
+        status, headers, _ = self._request("POST", "/tokens", dict(
             username=self.get_option("username"),
             password=self.get_option("password"),
         ))
@@ -117,6 +118,7 @@ class Connection(ConnectionBase):
         return self._local.fetch_file(in_path, out_path)
 
     def close(self):
+        self._conn_closed = True
         if not self._connected:
             return
 
@@ -160,11 +162,14 @@ class Connection(ConnectionBase):
             )
         return r_status, r_headers, r_data
 
+    @ensure_connect
     def get(self, path):
         return self._request("GET", path)
 
+    @ensure_connect
     def post(self, path, payload=None):
         return self._request("POST", path, payload)
 
+    @ensure_connect
     def delete(self, path):
         return self._request("DELETE", path)

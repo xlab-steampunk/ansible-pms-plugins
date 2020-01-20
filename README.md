@@ -7,7 +7,7 @@ included is the mock service that we can use to test the modules.
 
 ## Quickstart
 
-First, make sure you have Ansible 2.8.1 or newer installed. Next, start the
+First, make sure you have Ansible 2.9.0 or newer installed. Next, start the
 mock server:
 
     $ python3 server.py
